@@ -1,12 +1,12 @@
 // pages/_app.js
-import Index from '../components/index';
+import Dashboard from '../pages/index';
 import '../pages/css/Layout.css';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Index>
+    <Dashboard>
       <Component {...pageProps} />
-    </Index>
+    </Dashboard>
   );
 }
 
