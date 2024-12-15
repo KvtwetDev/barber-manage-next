@@ -1,0 +1,37 @@
+.content-client {
+    overflow-x: auto;
+    width: 90%;
+    height: 70%;
+    padding: 0 5px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 15px 15px 0px rgba(0, 0, 0, 0.1);
+}
+
+.content-client table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.content-client thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 0;
+}
+.content-client th:first-child{
+    border-top-left-radius: 8px;
+}
+.content-client th:last-child{
+    border-top-right-radius: 8px;
+}
+.content-client th {
+    padding: 10px;
+    text-align: left;
+    color: white;
+    background-color: #28293e;
+}
+.content-client td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}

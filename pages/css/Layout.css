@@ -1,0 +1,217 @@
+.layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .leftbar {
+    background-color: #1e1e2f;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    width: 85vw;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color: #f4f4f9;
+    padding-top: 5%;
+  }
+  .page{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+.header{
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+.header h1{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+.header p{
+    font-size: 16px;
+    color: #6c757d;
+}
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-30%, -50%);
+  width: 90%;
+  max-width: 500px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1000;
+  background-color: white;
+}
+.custom-modal form{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 200px;
+  gap: 15px;
+}
+.select-client {
+  width: 100%;
+}
+.custom-modal h2 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+.input-content, .label-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.input-content{
+  width: 100%;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:first-of-type {
+  background-color: #ccc;
+  color: #000;
+}
+
+button:last-of-type {
+  background-color: #007bff;
+  color: #fff;
+}
+.add-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.add-button:hover {
+  background-color: #0056b3;
+}
+.actions button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+.actions button:first-child {
+  background-color: #ffc107;
+  color: white;
+}
+.actions button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-30%, -50%);
+  width: 50vw;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  z-index: 1000;
+  background-color: white;
+}
+.modal h2 {
+  margin-bottom: 15px;
+}
+.modal form label {
+  display: block;
+  margin-bottom: 10px;
+}
+.modal form input,
+.modal form textarea,
+.modal form select {
+  width: 98%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.modal form select{
+  width: 180px;
+  margin-left: 20px;
+}
+.modal button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.modal button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+.modal button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+.toggle-buttons button {
+  margin: 10px 10px 20px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+.toggle-buttons button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+.filter-buttons button {
+  padding: 10px 15px;
+  margin-right: 5px;
+  border: none;
+  background-color: #d1d1d1;
+  cursor: pointer;
+  border-radius: 4px;
+  color: black;
+}
+
+.filter-buttons button.active {
+  background-color: #007bff;
+  color: white;
+}

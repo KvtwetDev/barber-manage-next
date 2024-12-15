@@ -1,0 +1,38 @@
+.content-product {
+    overflow-x: auto;
+    width: 90%;
+    height: 70%;
+    padding: 0 5px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 15px 15px 0px rgba(0, 0, 0, 0.1);
+}
+
+.content-product table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.content-product thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 0;
+}
+.content-product th:first-child{
+    border-top-left-radius: 8px;
+}
+.content-product th:last-child{
+    border-top-right-radius: 8px;
+}
+.content-product th {
+    padding: 10px;
+    text-align: left;
+    color: white;
+    background-color: #28293e;
+}
+.content-product td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
