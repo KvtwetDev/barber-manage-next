@@ -2,7 +2,6 @@ import { db } from './firebaseConfig';
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const clientsCollection = collection(db, 'clients');
-const salesCollection = collection(db, 'sales');
 
 export const fetchClients = async () => {
     const snapshot = await getDocs(clientsCollection);
@@ -44,15 +43,31 @@ export const deleteClient = async (id) => {
 // Bloco de agendamentos
 const appointmentsCollections = collection(db, 'appointments');
 
-export const saveAppointment = async (appointment) => {
+export const saveAppointment = async (appointment, id=null) => {
     try {
-        const docRef = await addDoc(appointmentsCollections, appointment);
-        return docRef.id;
+        if (id) {
+            const docRef = doc(appointmentsCollections, appointment, id);
+            await updateDoc(docRef, appointment);
+        } else {
+            const docRef = await addDoc(appointmentsCollections, appointment);
+            return docRef.id;
+        }
+
     }catch (error) {
         console.error('Erro ao salvar o agendamento', error);
         throw error;
     }
 };
+
+export const deleteAppointment = async (appointment) => {
+    try {
+        const appointmentRef = doc(appointmentsCollections, appointment.id);
+        await deleteDoc(appointmentRef);
+    }catch (error) {
+        alert('Erro ao deletar o agendamento:', error);
+    }
+};
+
 export const fetchAppointments = async () => {
     const snapshot = await getDocs(appointmentsCollections);
     const appointment = snapshot.docs.map((doc) => ({
@@ -122,6 +137,7 @@ export const deleteEmployee = async (id) => {
 };
 
 // Bloco de vendas
+const salesCollection = collection(db, 'sales');
 
 export const saveSales = async (sale) => {
     try {
@@ -132,4 +148,15 @@ export const saveSales = async (sale) => {
         console.log('Erro ao salvar venda:', error);
         throw error;
     }
+};
+
+export const fetchSales = async () => {
+    const snapshot = await getDocs(salesCollection);
+    const sales = snapshot.docs.map((doc) => ( {id: doc.id, ...doc.data()} ));
+    const totalSales = sales.reduce((total, sale) => {
+        const itemTotal = sale.items.reduce((sum, item) => sum + (item.price || 0), 0);
+        return total + itemTotal
+    }, 0);
+
+    return {sales, totalSales}
 };

@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
 import './css/LeftBar.css';
 import { useState, useEffect } from 'react';
+import Footer from './footer';
+
+import './css/Layout.css';
 
 const LeftBar = () => {
   const [isAdminOpen, setAdminOpen] = useState(false);
@@ -33,121 +36,124 @@ const LeftBar = () => {
 
   return (
     <div className="leftbar" id="root">
-      <div className="logo">
-        <h2>Barber Manage</h2>
+      <div>
+        <div className="logo">
+          <h2>Barber Manage</h2>
+        </div>
+        <nav className="menu">
+          <ul>
+            <li className="menu-item">
+              <span
+                className={activeItem === '/' ? 'active' : ''}
+                onClick={() => handleNavigation('/')}
+              >
+                Página Inicial
+              </span>
+            </li>
+
+            <li className="menu-item">
+              <span
+                className={activeItem === '/appointments' ? 'active' : ''}
+                onClick={() => handleNavigation('/appointments')}
+              >
+                Agendamentos
+              </span>
+            </li>
+
+            <li className="menu-item">
+              <span
+                className={activeItem === '/costumers' ? 'active' : ''}
+                onClick={() => handleNavigation('/costumers')}
+              >
+                Clientes
+              </span>
+            </li>
+
+            <li className="menu-item">
+              <span
+                className={activeItem === '/stock' ? 'active' : ''}
+                onClick={() => handleNavigation('/stock')}
+              >
+                Serviços e Produtos
+              </span>
+            </li>
+
+            <li className="menu-item">
+              <span
+                className={activeItem === '/cash' ? 'active' : ''}
+                onClick={() => handleNavigation('/cash')}
+              >
+                Caixa e Pagamentos
+              </span>
+            </li>
+
+            <li className="menu-item" onClick={() => setAdminOpen(!isAdminOpen)}>
+              <span style={{color: 'red'}}>Administração</span>
+              {isAdminOpen && (
+                <ul className="submenu">
+                  <li>
+                    <span
+                      className={activeItem === '/admindashboard' ? 'active' : ''}
+                      onClick={() => handleNavigation('/admindashboard')}
+                    >
+                      Dashboard
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      className={activeItem === '/employees' ? 'active' : ''}
+                      onClick={() => handleNavigation('/employees')}
+                    >
+                      Funcionários
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      className={activeItem === '/reports' ? 'active' : ''}
+                      onClick={() => handleNavigation('/reports')}
+                    >
+                      Relatórios
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      className={activeItem === '/access-management' ? 'active' : ''}
+                      onClick={() => handleNavigation('/access-management')}
+                    >
+                      Gestão de Acessos
+                    </span>
+                  </li>
+                  <li>
+                    <span
+                      className={activeItem === '/logs' ? 'active' : ''}
+                      onClick={() => handleNavigation('/logs')}
+                    >
+                      Logs de Atividades
+                    </span>
+                  </li>
+                </ul>
+              )}
+            </li>
+
+            <li className="menu-item">
+              <span style={{color: 'red'}}
+                className={activeItem === '/settings' ? 'active' : ''}
+                onClick={() => handleNavigation('/settings')}
+              >
+                Configurações
+              </span>
+            </li>
+          </ul>
+        </nav>
+        <div className="logout">
+          <ul>
+            <li className="menu-item">
+              <span style={{color: 'red'}} onClick={() => handleNavigation('/logout')}>Sair</span>
+            </li>
+          </ul>
+        </div>
       </div>
-      <nav className="menu">
-        <ul>
-          <li className="menu-item">
-            <span
-              className={activeItem === '/dashboard' ? 'active' : ''}
-              onClick={() => handleNavigation('/dashboard')}
-            >
-              Página Inicial
-            </span>
-          </li>
-
-          <li className="menu-item">
-            <span
-              className={activeItem === '/appointments' ? 'active' : ''}
-              onClick={() => handleNavigation('/appointments')}
-            >
-              Agendamentos
-            </span>
-          </li>
-
-          <li className="menu-item">
-            <span
-              className={activeItem === '/costumers' ? 'active' : ''}
-              onClick={() => handleNavigation('/costumers')}
-            >
-              Clientes
-            </span>
-          </li>
-
-          <li className="menu-item">
-            <span
-              className={activeItem === '/stock' ? 'active' : ''}
-              onClick={() => handleNavigation('/stock')}
-            >
-              Serviços e Produtos
-            </span>
-          </li>
-
-          <li className="menu-item">
-            <span
-              className={activeItem === '/cash' ? 'active' : ''}
-              onClick={() => handleNavigation('/cash')}
-            >
-              Caixa e Pagamentos
-            </span>
-          </li>
-
-          <li className="menu-item" onClick={() => setAdminOpen(!isAdminOpen)}>
-            <span>Administração</span>
-            {isAdminOpen && (
-              <ul className="submenu">
-                <li>
-                  <span
-                    className={activeItem === '/admindashboard' ? 'active' : ''}
-                    onClick={() => handleNavigation('/admindashboard')}
-                  >
-                    Dashboard
-                  </span>
-                </li>
-                <li>
-                  <span
-                    className={activeItem === '/employees' ? 'active' : ''}
-                    onClick={() => handleNavigation('/employees')}
-                  >
-                    Funcionários
-                  </span>
-                </li>
-                <li>
-                  <span
-                    className={activeItem === '/reports' ? 'active' : ''}
-                    onClick={() => handleNavigation('/reports')}
-                  >
-                    Relatórios
-                  </span>
-                </li>
-                <li>
-                  <span
-                    className={activeItem === '/access-management' ? 'active' : ''}
-                    onClick={() => handleNavigation('/access-management')}
-                  >
-                    Gestão de Acessos
-                  </span>
-                </li>
-                <li>
-                  <span
-                    className={activeItem === '/logs' ? 'active' : ''}
-                    onClick={() => handleNavigation('/logs')}
-                  >
-                    Logs de Atividades
-                  </span>
-                </li>
-              </ul>
-            )}
-          </li>
-
-          <li className="menu-item">
-            <span
-              className={activeItem === '/settings' ? 'active' : ''}
-              onClick={() => handleNavigation('/settings')}
-            >
-              Configurações
-            </span>
-          </li>
-        </ul>
-      </nav>
-      <div className="logout">
-        <ul>
-          <li className="menu-item">
-            <span onClick={() => handleNavigation('/logout')}>Sair</span>
-          </li>
-        </ul>
-      </div>
+      <Footer/>
     </div>
   );
 };

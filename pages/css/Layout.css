@@ -1,7 +1,11 @@
+*{
+  margin: 0;
+}
+
 .layout {
     display: flex;
     height: 100vh;
-    width: 100vw;
+
     display: flex;
     justify-content: flex-end;
   }
@@ -12,17 +16,18 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 15vw;
     display: flex;
     flex-direction: column;
   }
   .content {
-    width: 85vw;
+    width: 85%;
     display: flex;
     justify-content: center;
     align-items: center; 
     background-color: #f4f4f9;
     padding-top: 5%;
+    margin: 0;
+    overflow: hidden;
   }
   .page{
     padding: 20px;
@@ -214,4 +219,25 @@ button:last-of-type {
 .filter-buttons button.active {
   background-color: #007bff;
   color: white;
+}
+.homepage-footer{
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+  padding-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px;
+}
+.footer-content{
+  padding-bottom: 20px;
+  width: 80%;
+}
+.homepage-footer a{
+  text-decoration: none;
+  color: #fff;
+  padding-top: 10px;
 }
