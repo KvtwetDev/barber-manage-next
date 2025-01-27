@@ -95,12 +95,12 @@ export const updateProduct = async (id, updateProduct) => {
 
 export const deleteProduct = async (id) => {
     try {
-        const productRef = doc(db, "products", id); // Certifique-se de que "products" é o nome correto da sua coleção
+        const productRef = doc(db, "products", id); 
         await deleteDoc(productRef);
         console.log(`Produto com ID ${id} foi excluído com sucesso.`);
     } catch (error) {
         console.error("Erro ao excluir produto:", error);
-        throw error; // Repassa o erro para a função que chamou
+        throw error;
     }
 };
 

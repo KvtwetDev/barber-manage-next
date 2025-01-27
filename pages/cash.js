@@ -39,22 +39,20 @@ const Cash = () => {
     loadProducts();
   }, []);
 
-  
   const loadBarbers = async () => {
     try {
       const employees = await fetchEmployees();
       const filteredBarbers = employees.filter(employee => employee.cargo === 'Barbeiro').map(employee => employee.nome);
       setBarbers(filteredBarbers);
-      console.log('Barbeiros carregados:', filteredBarbers);
     } catch (error) {
       console.error('Erro ao carregar barbeiros:', error);
-      }
+    }
   };
-  
+
   useEffect(() => {
     loadBarbers();
   }, []);
-  
+
   const addToCart = (service) => {
     if (service && service.price !== undefined && service.name) {
       setCart(prevCart => {
@@ -127,7 +125,7 @@ const Cash = () => {
       alert('Por favor, selecione um cliente antes de finalizar a venda.');
       return;
     }
-  
+
     const saleData = {
       clientId: selectedClient.id,
       clientName: selectedClient.name,
@@ -137,18 +135,16 @@ const Cash = () => {
       items: cart,
       date: new Date().toISOString(),
     };
-  
+
     try {
       await saveSales(saleData);
       alert('Venda finalizada com sucesso!');
-  
-      // Deletar o agendamento após a venda
+
       await deleteAppointment(selectedClient.id);
 
       const updateClients = clients.filter(client => client.id !== selectedClient.id);
       setClients(updateClients);
-  
-      // Resetar o estado
+
       setCart([]);
       setTotal(0);
       setSelectedBarber(null);
@@ -157,7 +153,6 @@ const Cash = () => {
       console.error('Erro ao salvar venda:', error);
     }
   };
-  
 
   const formatCpfNumber = (cpf) => {
     if (!cpf) return '';
