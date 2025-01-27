@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './css/Index.css';
 
-import { fetchAppointments, fetchClients, fetchSales } from '../src/functions/firestoreFunction';
+import { fetchAppointments, fetchClients } from '../src/functions/firestoreFunction';
 import { format } from 'date-fns';
 import Layout from './layout';
 import { useRouter } from 'next/router';
@@ -13,7 +13,6 @@ const Dashboard = () => {
   const [clients, setClients] = useState([]);
   const [userName] = useState("Lucas Eduardo");
   const [services] = useState(5);
-  const [totalSales, setTotalSales] = useState(0)
 
   const handleNavigation = (path) => {
     router.push(path);
@@ -33,25 +32,6 @@ const Dashboard = () => {
     };
     loadAppointments();
   }, []);
-  
-  useEffect(() => {
-    const loadSales = async () => {
-      try {
-        const { totalSales } = await fetchSales();
-        setTotalSales(totalSales);
-      }catch (error){
-        console.log('Erro ao buscar vendas:', error);
-      }
-    };
-    loadSales();
-  }, []);
-
-  const formatToBRL = (totalSales) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style:'currency',
-      currency:'BRL',
-    }).format(totalSales);
-  };
 
   return (
     <Layout>
@@ -71,22 +51,6 @@ const Dashboard = () => {
           <h2>Clientes</h2>
           <p>Você tem {clients.length} clientes cadastrados</p>
           <button onClick={() => handleNavigation('/costumers')}>Gerenciar</button>
-        </div>
-        <div className="section-card">
-          <h2>Serviços</h2>
-          <p>Você tem {services} serviços oferecidos</p>
-          <button onClick={() => handleNavigation('/stock')}>Ver Serviços</button>
-        </div>
-      </section>
-
-      <section className="homepage-stats">
-        <div className="stat-card">
-          <h3>Receita Mensal</h3>
-          <p>R$: {formatToBRL(totalSales)}</p>
-        </div>
-        <div className="stat-card">
-          <h3>Serviços Realizados</h3>
-          <p>120 este mês</p>
         </div>
       </section>
 

@@ -46,7 +46,7 @@ const appointmentsCollections = collection(db, 'appointments');
 export const saveAppointment = async (appointment, id=null) => {
     try {
         if (id) {
-            const docRef = doc(appointmentsCollections, appointment, id);
+            const docRef = doc(appointmentsCollections, id);
             await updateDoc(docRef, appointment);
         } else {
             const docRef = await addDoc(appointmentsCollections, appointment);
@@ -59,14 +59,16 @@ export const saveAppointment = async (appointment, id=null) => {
     }
 };
 
-export const deleteAppointment = async (appointment) => {
+export const deleteAppointment = async (id) => {
     try {
-        const appointmentRef = doc(appointmentsCollections, appointment.id);
+        const appointmentRef = doc(db, 'appointments', id);
         await deleteDoc(appointmentRef);
-    }catch (error) {
+        console.log('Agendamento deletado com sucesso');
+    } catch (error) {
         alert('Erro ao deletar o agendamento:', error);
     }
 };
+
 
 export const fetchAppointments = async () => {
     const snapshot = await getDocs(appointmentsCollections);
@@ -92,13 +94,20 @@ export const updateProduct = async (id, updateProduct) => {
 };
 
 export const deleteProduct = async (id) => {
-    await deleteDoc(doc(db, 'product', id));
+    try {
+        const productRef = doc(db, "products", id); // Certifique-se de que "products" é o nome correto da sua coleção
+        await deleteDoc(productRef);
+        console.log(`Produto com ID ${id} foi excluído com sucesso.`);
+    } catch (error) {
+        console.error("Erro ao excluir produto:", error);
+        throw error; // Repassa o erro para a função que chamou
+    }
 };
 
 // Bloco de funcionários
 export const fetchEmployees = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, 'employees'));
+        const querySnapshot = await getDocs(collection(db, 'funcionarios'));
         return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error('Erro ao buscar funcionários:', error);

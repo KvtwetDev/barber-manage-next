@@ -39,18 +39,6 @@
 .section-card button:hover{
     background-color: #0056b3;
 }
-.homepage-stats{
-    display: flex;
-    gap: 20px;
-}
-.stat-card{
-    flex: 1;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0,1);
-}
 
 .homepage-next{
     margin-top: 50px;

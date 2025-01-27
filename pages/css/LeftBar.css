@@ -16,12 +16,9 @@
   width: 100%;
   height: auto;
 }
-.leftbar .menu .logout{
-  padding: 20px 0;
-}
+
 .menu ul, .logout ul {
   list-style: none;
-  margin: 0;
   padding: 1%;
 }
 .menu-item a,
@@ -29,7 +26,7 @@
   color: #fff;
   text-decoration: none;
   font-size: 15px;
-  padding: 20px 0;
+  padding: 15px 0;
   display: block;
   border-radius: 4px;
   transition: background-color 0.3s;
@@ -45,19 +42,4 @@
   background-color: #333351;
   box-shadow: 0 0 2px rgba(255, 255, 255, 0.2)
 }
-.submenu{
-  display: block;
-}
-.menu-item:nth-child(6){
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: flex-end;
-}
-.submenu a{
-  margin-right: 50px;
-  border-radius: 4px;
-  color: #fff;
-  border-left: 1px solid rgb(207, 207, 207);
-  display: block;
-}
+

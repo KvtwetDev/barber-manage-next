@@ -71,15 +71,6 @@ const LeftBar = () => {
 
             <li className="menu-item">
               <span
-                className={activeItem === '/stock' ? 'active' : ''}
-                onClick={() => handleNavigation('/stock')}
-              >
-                Serviços e Produtos
-              </span>
-            </li>
-
-            <li className="menu-item">
-              <span
                 className={activeItem === '/cash' ? 'active' : ''}
                 onClick={() => handleNavigation('/cash')}
               >
@@ -87,52 +78,13 @@ const LeftBar = () => {
               </span>
             </li>
 
-            <li className="menu-item" onClick={() => setAdminOpen(!isAdminOpen)}>
-              <span style={{color: 'red'}}>Administração</span>
-              {isAdminOpen && (
-                <ul className="submenu">
-                  <li>
-                    <span
-                      className={activeItem === '/admindashboard' ? 'active' : ''}
-                      onClick={() => handleNavigation('/admindashboard')}
-                    >
-                      Dashboard
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={activeItem === '/employees' ? 'active' : ''}
-                      onClick={() => handleNavigation('/employees')}
-                    >
-                      Funcionários
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={activeItem === '/reports' ? 'active' : ''}
-                      onClick={() => handleNavigation('/reports')}
-                    >
-                      Relatórios
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={activeItem === '/access-management' ? 'active' : ''}
-                      onClick={() => handleNavigation('/access-management')}
-                    >
-                      Gestão de Acessos
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={activeItem === '/logs' ? 'active' : ''}
-                      onClick={() => handleNavigation('/logs')}
-                    >
-                      Logs de Atividades
-                    </span>
-                  </li>
-                </ul>
-              )}
+            <li className="menu-item">
+              <span
+                className={activeItem === '/admin' ? 'active' : ''}
+                onClick={() => handleNavigation('/admin')}
+              >
+                Administração
+              </span>
             </li>
 
             <li className="menu-item">

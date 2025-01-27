@@ -1,7 +1,7 @@
 .content-product {
     overflow-x: auto;
     width: 90%;
-    height: 70%;
+    height: 60%;
     padding: 0 5px;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -36,3 +36,11 @@
     border-bottom: 1px solid #ddd;
 }
 
+.search-bar{
+    padding: 10px;
+    margin: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    
+}

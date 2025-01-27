@@ -31,6 +31,11 @@
     gap: 5px;
     justify-content: space-around;
     padding: 2px;
+    border-radius: 5px;
+}
+.cart-list li{
+    display: flex;
+    align-items: center;
 }
 .cart-content{
     display: flex;
@@ -45,19 +50,31 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     border-radius: 8px;
 }
-.client-selector h3{
-    color: white;
+.client-search, .barber-content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    width: 100%;
+    padding-bottom: 10px;
+    & label{
+        text-align: center;
+    }
+    & select{
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
 }
-
 .cart-content:nth-child(odd){
     background-color: rgba(128, 128, 128, 0.115);
 }
-.client-about{
-    display: flex;
-    flex-direction: column;
-}
+
 .client-about p{
     text-align: right;
 }
@@ -65,12 +82,16 @@
     gap: 20px;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    border: 1px solid white;
+    width: 100%;
     width: 95%;
 
 }
 .product-search input{
     padding: 5px;
     flex:1;
+}
+.suggestions{
+    background-color: white;
+    color: black;
+    border-radius: 5px;
 }

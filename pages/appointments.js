@@ -17,8 +17,9 @@ import Layout from './layout'
 const SchedulerCalendar = () => {
   const [events, setEvents] = useState([]);
   const [services, setServices] = useState([]);
+  const [serviceDetails, setServiceDetails] = useState([]);
   const [clients, setClients] = useState([]);
-  const [newEvent, setNewEvent] = useState({ start: '', end: '', costumer: '', service: ''});
+  const [newEvent, setNewEvent] = useState({ start: '', end: '', costumer: '', cpf: '', service: ''});
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const SchedulerCalendar = () => {
         const formattedClients = clientsData.map((client) => ({
           value: client.name,
           label: client.name,
+          cpf: client.cpf
         }));
         setClients(formattedClients);
 
@@ -48,11 +50,11 @@ const SchedulerCalendar = () => {
           .filter((product) => product.category == 'Serviço')
           .map((product) => ({
             value: product.name,
-            label: product.name,
+            label: `${product.name} - R$ ${product.price.toFixed(2)}`,
+            price: product.price,
           }));
 
           setServices(filteredServices);
-          console.log(filteredServices);
 
       } catch (error) {
         console.log('Erro ao carregar dados', error);
@@ -87,10 +89,12 @@ const SchedulerCalendar = () => {
       return;
     }
     try {
+      const selectedService = services.find((service) => service.value === newEvent.service);
       const appointment = {
         start: newEvent.start,
         end: newEvent.end,
         costumer: newEvent.costumer,
+        cpf: newEvent.cpf,
         service: newEvent.service
       };
 
@@ -108,7 +112,17 @@ const SchedulerCalendar = () => {
         setEvents((preEvents) => [...preEvents, {id, ... appointment}]);
         alert('Agendamento salvo com sucesso');
       }
-      
+
+      if (selectedService) {
+        setServiceDetails((prevDetails) => [
+          ...prevDetails,
+          {
+            name: selectedService.value,
+            price: selectedService.price,
+          },
+        ]);
+      }
+      handleCloseModal();
     } catch (error) {
       console.log('Erro ao salvar o agendamento', error);
     }
@@ -153,7 +167,7 @@ const SchedulerCalendar = () => {
                 className="select-client"
                 options={clients}
                 onChange={(selectedOption) =>
-                  setNewEvent({ ...newEvent, costumer: selectedOption ? selectedOption.value : '' })
+                  setNewEvent({ ...newEvent, costumer: selectedOption ? selectedOption.value : '', cpf: selectedOption ? selectedOption.cpf : '' })
                 }
                 isClearable
                 placeholder="Selecione ou digite um cliente..."
@@ -178,13 +192,19 @@ const SchedulerCalendar = () => {
                 className="select-services"
                 options={services}
                 onChange={(selectedOption) =>
-                  setNewEvent({ ...newEvent, service: selectedOption ? selectedOption.value : '' })
+                  setNewEvent({
+                    ...newEvent,
+                    service: selectedOption ? { name: selectedOption.value, price: selectedOption.price } : ''
+                  })
                 }
                 isClearable
                 placeholder="Selecione ou digite um serviço..."
                 value={
                   newEvent.service
-                    ? { value: newEvent.service, label: newEvent.service }
+                    ? {
+                        value: newEvent.service.name,
+                        label: `${newEvent.service.name} - R$ ${newEvent.service.price.toFixed(2)}`
+                      }
                     : null
                 }
                 noOptionsMessage={() => 'Nenhum serviço encontrado'}
@@ -211,12 +231,13 @@ const SchedulerCalendar = () => {
                 right: 'dayGridMonth,timeGridWeek,timeGridDay',
               }}
               eventContent={(eventInfo) => (
-                <div>
+                <div style={{ fontSize:'10px'}}>
                   <span>{eventInfo.event.title}</span>
                 </div>
               )}
               locale="pt-br"
-              height="95%"
+              height="90%"
+              button
             />
           </div>
 

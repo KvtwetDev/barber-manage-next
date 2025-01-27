@@ -1,23 +1,33 @@
 import { useState, useEffect } from 'react';
-import { fetchClients, fetchProducts, saveSales } from '../src/functions/firestoreFunction';
+import { deleteAppointment, fetchAppointments, fetchEmployees, fetchProducts, saveSales } from '../src/functions/firestoreFunction';
 import Layout from './layout';
 import './css/Cash.css';
 import './css/Layout.css';
+import { deleteApp } from 'firebase/app';
 
 const Cash = () => {
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
-  const [selectedClient, setSelectedClient] = useState('');
+  const [selectedClient, setSelectedClient] = useState(null);
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [highlightIndex, setHighlightIndex] = useState(0);
 
+  const [barbers, setBarbers] = useState([]);
+  const [selectedBarber, setSelectedBarber] = useState('');
+
   useEffect(() => {
     const loadClients = async () => {
-      const clientList = await fetchClients();
-      setClients(clientList);
+      const clientList = await fetchAppointments();
+      const appointmentClients = clientList.map(appointment => ({
+        id: appointment.id,
+        name: appointment.costumer,
+        cpf: appointment.cpf,
+        service: appointment.service || [],
+      }));
+      setClients(appointmentClients);
     };
 
     const loadProducts = async () => {
@@ -29,19 +39,47 @@ const Cash = () => {
     loadProducts();
   }, []);
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-    setTotal(total + product.price);
-    setSearchTerm('');
-    setFilteredProducts([]);
-    setHighlightIndex(0);
+  
+  const loadBarbers = async () => {
+    try {
+      const employees = await fetchEmployees();
+      const filteredBarbers = employees.filter(employee => employee.cargo === 'Barbeiro').map(employee => employee.nome);
+      setBarbers(filteredBarbers);
+      console.log('Barbeiros carregados:', filteredBarbers);
+    } catch (error) {
+      console.error('Erro ao carregar barbeiros:', error);
+      }
+  };
+  
+  useEffect(() => {
+    loadBarbers();
+  }, []);
+  
+  const addToCart = (service) => {
+    if (service && service.price !== undefined && service.name) {
+      setCart(prevCart => {
+        const updatedCart = [...prevCart, service];
+        const updatedTotal = updatedCart.reduce((total, item) => total + item.price, 0);
+        setTotal(updatedTotal);
+        return updatedCart;
+      });
+    }
+  };
+
+  const deleteCart = (index) => {
+    const updateCart = cart.filter((_, i) => i !== index);
+    setCart(updateCart);
+
+    const newTotal = updateCart.reduce((total, item) => total + item.price, 0);
+    setTotal(newTotal);
   };
 
   const handleSearchChange = (e) => {
-    const term = e.target.value;
+    const term = e.target.value.toLowerCase();
     setSearchTerm(term);
+
     const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(term.toLowerCase())
+      product.name.toLowerCase().includes(term)
     );
     setFilteredProducts(filtered);
     setHighlightIndex(0);
@@ -59,31 +97,74 @@ const Cash = () => {
     }
   };
 
+  const handleClientSelection = (clientId) => {
+    const appointment = clients.find(client => client.id === clientId);
+    setSelectedClient(appointment);
+
+    if (appointment) {
+      let clientServices = [];
+      if (Array.isArray(appointment.service)) {
+        clientServices = appointment.service.map(s => ({
+          name: s.name,
+          price: s.price
+        }));
+      } else if (appointment.service) {
+        clientServices = [{
+          name: appointment.service.name,
+          price: appointment.service.price
+        }];
+      }
+      const updatedTotal = clientServices.reduce((total, item) => total + item.price, 0);
+      setTotal(updatedTotal);
+      setCart(clientServices);
+    } else {
+      setCart([]);
+    }
+  };
+
   const handleSale = async () => {
+    if (!selectedClient) {
+      alert('Por favor, selecione um cliente antes de finalizar a venda.');
+      return;
+    }
+  
     const saleData = {
       clientId: selectedClient.id,
       clientName: selectedClient.name,
+      clientCpf: selectedClient.cpf,
+      barbers: selectedBarber,
       total: total,
       items: cart,
       date: new Date().toISOString(),
     };
-
+  
     try {
       await saveSales(saleData);
       alert('Venda finalizada com sucesso!');
+  
+      // Deletar o agendamento após a venda
+      await deleteAppointment(selectedClient.id);
+
+      const updateClients = clients.filter(client => client.id !== selectedClient.id);
+      setClients(updateClients);
+  
+      // Resetar o estado
       setCart([]);
       setTotal(0);
+      setSelectedBarber(null);
+      setSelectedClient(null);
     } catch (error) {
       console.error('Erro ao salvar venda:', error);
     }
-    setSelectedClient([]);
   };
+  
 
-  const deleteCart = (index) => {
-    const removedItem = cart[index];
-    const updateCart = cart.filter((_, i) => i !== index);
-    setCart(updateCart);
-    setTotal((prevTotal) => prevTotal - removedItem.price);
+  const formatCpfNumber = (cpf) => {
+    if (!cpf) return '';
+    return cpf.replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2');
   };
 
   return (
@@ -106,42 +187,59 @@ const Cash = () => {
           </div>
 
           <div className="client-selector">
-            <div>
-                <label>Selecione o Cliente: </label>
-                <select
-                onChange={(e) => {
-                    const client = clients.find(client => client.id === e.target.value);
-                    setSelectedClient(client);
-                }}
+            <div className='client-search'>
+              <label>Selecione o Cliente: </label>
+              <select
+                onChange={(e) => handleClientSelection(e.target.value)}
                 value={selectedClient?.id || ''}
-                >
+              >
                 <option value="">-- Selecione --</option>
                 {clients.map(client => (
-                    <option key={client.id} value={client.id}>
+                  <option key={client.id} value={client.id}>
                     {client.name}
-                    </option>
+                  </option>
                 ))}
-                </select>
-                <div className='client-content'>
-                    {selectedClient ? (
-                        <div className='client-about' key={selectedClient.id}>
-                            <div>
-                                <h2>Cliente</h2>
-                                <p>{selectedClient.name}</p>
-                            </div>
-                            <div>
-                                <h2>CPF</h2>
-                            </div>
-                        </div>
-                    ) : (
-                        <p>Nenhum cliente selecionado</p>
-                    )}
-                </div>
+              </select>
 
+              <div className='client-content'>
+                {selectedClient ? (
+                  <div className='client-about' key={selectedClient.name}>
+                    <div>
+                      <h2>Cliente</h2>
+                      <p>{selectedClient.name}</p>
+                    </div>
+                    <div>
+                      <h2>CPF</h2>
+                      <p>{formatCpfNumber(selectedClient.cpf)}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p>Nenhum cliente selecionado</p>
+                )}
+              </div>
             </div>
 
-          <div className="product-search">
-            <h2>Busca de Produtos/Serviços</h2>
+            <div className='barber-content'>
+              <label htmlFor="barber-select" className="barber-label">
+                Selecionar Barbeiro
+              </label>
+              <select
+                id="barber-select"
+                className="barber-option"
+                value={selectedBarber}
+                onChange={(e) => setSelectedBarber(e.target.value)}
+              >
+                <option value="">Selecione um barbeiro</option>
+                {barbers.map((barber, index) => (
+                  <option key={index} value={barber}>
+                    {barber}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="product-search">
+              <h2>Busca de Produtos/Serviços</h2>
               <input
                 type="text"
                 placeholder="Digite o produto/serviço..."
@@ -150,24 +248,25 @@ const Cash = () => {
                 onKeyDown={handleKeyDown}
               />
               <div className="suggestions">
-                {filteredProducts.map((product, index) => (
-                  <div
-                    key={product.id}
-                    onClick={() => addToCart(product)}
-                    style={{
-                      padding: '5px',
-                      cursor: 'pointer',
-                      backgroundColor: index === highlightIndex ? '#f0f0f0' : 'transparent',
-                    }}
-                  >
-                    {product.name} - R$ {product.price.toFixed(2)}
-                  </div>
+                {searchTerm &&
+                  filteredProducts.map((product, index) => (
+                    <div
+                      key={product.id}
+                      onClick={() => addToCart(product)}
+                      style={{
+                        padding: '5px',
+                        cursor: 'pointer',
+                        backgroundColor: highlightIndex === index ? '#ddd' : 'transparent',
+                      }}
+                    >
+                      {product.name} - R$ {product.price.toFixed(2)}
+                    </div>
                 ))}
-            </div>
+              </div>
 
-            <h3>Total: R$ {total.toFixed(2)}</h3>
-            <button onClick={handleSale}>Finalizar Venda</button>
-          </div>
+              <h3>Total: R$ {total.toFixed(2)}</h3>
+              <button onClick={handleSale}>Finalizar Venda</button>
+            </div>
           </div>
         </div>
       </div>

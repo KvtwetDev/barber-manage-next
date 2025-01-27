@@ -36,7 +36,7 @@ export default function Costumers() {
         return clients;
     };
 
-    const handleOpenModal = (client = { id: null, name: '', email: '', phone: '' }) => {
+    const handleOpenModal = (client = { id: null, name: '', cpf:'', email: '', phone: '' }) => {
         setCurrentClient(client);
         setErrors({});
         setModalIsOpen(true);
@@ -44,7 +44,7 @@ export default function Costumers() {
 
     const handleCloseModal = () => {
         setModalIsOpen(false);
-        setCurrentClient({ id: null, name: '', email: '', phone: '' });
+        setCurrentClient({ id: null, name: '', cpf:'', email: '', phone: '' });
         setErrors({});
     };
 
@@ -67,6 +67,7 @@ export default function Costumers() {
         
         const clientData = {
             name: currentClient.name,
+            cpf: currentClient.cpf,
             email: currentClient.email,
             phone: currentClient.phone,
             createdAt: new Date().getTime()
@@ -101,6 +102,18 @@ export default function Costumers() {
 
     const handleSortByDate = () => {
         setSortBy('date');
+    };
+
+    const formatPhoneNumber = (phone) => {
+        if (!phone) return '';
+        phone = phone.replace(/\D/g, '');
+        if (phone.length === 11) {
+            return phone.replace(/^(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4');
+        } else if (phone.length === 10) {
+            return phone.replace(/^(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        } else {
+            return phone;
+        };
     };
 
     return (
@@ -142,6 +155,15 @@ export default function Costumers() {
                             />
                         </label>
                         <label>
+                            CPF:
+                            <input 
+                                type="number" 
+                                value={currentClient.cpf} 
+                                onChange={(e) => setCurrentClient({ ...currentClient, cpf: e.target.value })} 
+                                required 
+                            />
+                        </label>
+                        <label>
                             Email:
                             <input 
                                 type="email" 
@@ -176,7 +198,7 @@ export default function Costumers() {
                 <table>
                     <thead>
                         <tr>
-                            <th style={{ width: '45%'}}>Nome</th>
+                            <th style={{ width: '35%'}}>Nome</th>
                             <th style={{ width: '20%'}}>Email</th>
                             <th>Telefone</th>
                             <th style={{ width: '180px', textAlign: 'center'}}>Ações</th>
@@ -187,7 +209,7 @@ export default function Costumers() {
                             <tr key={client.id}>
                                 <td>{client.name}</td>
                                 <td>{client.email}</td>
-                                <td>{client.phone}</td>
+                                <td>{formatPhoneNumber(client.phone)}</td>
                                 <td className='actions'>
                                     <button className="edit-button" onClick={() => handleOpenModal(client)}>Editar</button>
                                     <button className="delete-button" onClick={() => handleDeleteClient(client.id)}>Excluir</button>
