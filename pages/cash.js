@@ -3,7 +3,8 @@ import { deleteAppointment, fetchAppointments, fetchEmployees, fetchProducts, sa
 import Layout from './layout';
 import './css/Cash.css';
 import './css/Layout.css';
-import { deleteApp } from 'firebase/app';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale/pt-BR';
 
 const Cash = () => {
   const [clients, setClients] = useState([]);
@@ -96,31 +97,49 @@ const Cash = () => {
   };
 
   const handleClientSelection = (clientId) => {
-    const appointment = clients.find(client => client.id === clientId);
-    setSelectedClient(appointment);
-
-    if (appointment) {
-      let clientServices = [];
-      if (Array.isArray(appointment.service)) {
-        clientServices = appointment.service.map(s => ({
-          name: s.name,
-          price: s.price
-        }));
-      } else if (appointment.service) {
-        clientServices = [{
-          name: appointment.service.name,
-          price: appointment.service.price
-        }];
-      }
-      const updatedTotal = clientServices.reduce((total, item) => total + item.price, 0);
-      setTotal(updatedTotal);
-      setCart(clientServices);
-    } else {
+    if (clientId === "avulso") {
+      setSelectedClient({
+        id: 'avulso',
+        name: 'Cliente Avulso',
+        cpf: '',
+        service: [],
+      });
       setCart([]);
-    }
-  };
+      setTotal(0);
+    }else{
+
+      const appointment = clients.find(client => client.id === clientId);
+      setSelectedClient(appointment);
+  
+      if (appointment) {
+        let clientServices = [];
+        if (Array.isArray(appointment.service)) {
+          clientServices = appointment.service.map(s => ({
+            name: s.name,
+            price: s.price
+          }));
+        } else if (appointment.service) {
+          clientServices = [{
+            name: appointment.service.name,
+            price: appointment.service.price
+          }];
+        }
+        const updatedTotal = clientServices.reduce((total, item) => total + item.price, 0);
+        setTotal(updatedTotal);
+        setCart(clientServices);
+      } else {
+        setCart([]);
+      }
+    };
+    };
+
 
   const handleSale = async () => {
+    const localDate = new Date();
+
+    const formattedDate = format(localDate, 'dd/MM/yyyy', { locale: ptBR });
+    const formmatedTime = format(localDate, 'HH:mm:ss');
+
     if (!selectedClient) {
       alert('Por favor, selecione um cliente antes de finalizar a venda.');
       return;
@@ -133,8 +152,12 @@ const Cash = () => {
       barbers: selectedBarber,
       total: total,
       items: cart,
-      date: new Date().toISOString(),
+      date: {
+        data: formattedDate,
+        hora: formmatedTime,
+      },
     };
+    console.log(saleData);
 
     try {
       await saveSales(saleData);
@@ -194,6 +217,7 @@ const Cash = () => {
                     {client.name}
                   </option>
                 ))}
+                <option value="avulso">Cliente Avulso</option>
               </select>
 
               <div className='client-content'>
@@ -224,7 +248,7 @@ const Cash = () => {
                 value={selectedBarber}
                 onChange={(e) => setSelectedBarber(e.target.value)}
               >
-                <option value="">Selecione um barbeiro</option>
+                <option value="">Selecione um funcionário</option>
                 {barbers.map((barber, index) => (
                   <option key={index} value={barber}>
                     {barber}

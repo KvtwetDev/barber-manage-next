@@ -12,7 +12,7 @@ const Admin = () => {
         <div className="admin-sections">
           <div className="admin-card">
             <h2>Funcionários</h2>
-            <p>Gerencie os barbeiros e outros colaboradores.</p>
+            <p>Gerencie seus colaboradores.</p>
             <Link href="/admin/funcionarios" className="admin-link">Gerenciar Funcionários</Link>
           </div>
 
