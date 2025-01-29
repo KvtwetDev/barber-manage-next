@@ -16,8 +16,8 @@ const Cash = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [highlightIndex, setHighlightIndex] = useState(0);
 
-  const [barbers, setBarbers] = useState([]);
-  const [selectedBarber, setSelectedBarber] = useState('');
+  const [Employee, setEmployee] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState('');
 
   useEffect(() => {
     const loadClients = async () => {
@@ -40,18 +40,18 @@ const Cash = () => {
     loadProducts();
   }, []);
 
-  const loadBarbers = async () => {
+  const loadEmployees = async () => {
     try {
       const employees = await fetchEmployees();
-      const filteredBarbers = employees.filter(employee => employee.cargo === 'Barbeiro').map(employee => employee.nome);
-      setBarbers(filteredBarbers);
+      const filteredEmployee = employees.filter(employee => employee.cargo === 'Barbeiro').map(employee => employee.nome);
+      setEmployee(filteredEmployee);
     } catch (error) {
       console.error('Erro ao carregar barbeiros:', error);
     }
   };
 
   useEffect(() => {
-    loadBarbers();
+    loadEmployees();
   }, []);
 
   const addToCart = (service) => {
@@ -149,7 +149,7 @@ const Cash = () => {
       clientId: selectedClient.id,
       clientName: selectedClient.name,
       clientCpf: selectedClient.cpf,
-      barbers: selectedBarber,
+      employee: selectedEmployee,
       total: total,
       items: cart,
       date: {
@@ -170,7 +170,7 @@ const Cash = () => {
 
       setCart([]);
       setTotal(0);
-      setSelectedBarber(null);
+      setSelectedEmployee(null);
       setSelectedClient(null);
     } catch (error) {
       console.error('Erro ao salvar venda:', error);
@@ -238,20 +238,20 @@ const Cash = () => {
               </div>
             </div>
 
-            <div className='barber-content'>
-              <label htmlFor="barber-select" className="barber-label">
-                Selecionar Barbeiro
+            <div className='employee-content'>
+              <label htmlFor="employee-select" className="employee-label">
+                Atribuir Funcionário
               </label>
               <select
-                id="barber-select"
-                className="barber-option"
-                value={selectedBarber}
-                onChange={(e) => setSelectedBarber(e.target.value)}
+                id="employee-select"
+                className="employee-option"
+                value={selectedEmployee}
+                onChange={(e) => setSelectedEmployee(e.target.value)}
               >
                 <option value="">Selecione um funcionário</option>
-                {barbers.map((barber, index) => (
-                  <option key={index} value={barber}>
-                    {barber}
+                {Employee.map((employee, index) => (
+                  <option key={index} value={employee}>
+                    {employee}
                   </option>
                 ))}
               </select>
