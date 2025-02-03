@@ -1,0 +1,47 @@
+.config-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .config-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .config-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .config-container label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .config-container select,
+  .config-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .config-container button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .config-container button:hover {
+    background: #0056b3;
+  }
+  

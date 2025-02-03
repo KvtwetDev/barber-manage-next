@@ -33,12 +33,13 @@ const LeftBar = () => {
       window.removeEventListener('resize', adjustFontSize);
     };
   }, []);
+  
 
   return (
     <div className="leftbar" id="root">
       <div>
         <div className="logo">
-          <h2>Barber Manage</h2>
+          <h2>Barbearia</h2>
         </div>
         <nav className="menu">
           <ul>

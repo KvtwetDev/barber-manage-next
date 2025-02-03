@@ -31,7 +31,7 @@ const Admin = () => {
           <div className="admin-card">
             <h2>Clientes VIP</h2>
             <p>Gerencie os clientes mais importantes.</p>
-            <Link href="/admin/clientes-vip" className="admin-link">Clientes VIP</Link>
+            <Link href="#" className="admin-link">Clientes VIP</Link>
           </div>
         </div>
       </div>
