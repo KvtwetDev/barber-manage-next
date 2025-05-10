@@ -8,10 +8,10 @@ const Configuracoes = () => {
   const [empresa, setEmpresa] = useState({
     nome: "",
     cnpj: "",
-    tipo: "salão de beleza", // Novo campo para selecionar o tipo de empresa
+    tipo: "salão de beleza",
   });
 
-  // Carregar os dados salvos no localStorage ao abrir a página
+
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("empresa"));
     if (savedData) {
@@ -19,23 +19,23 @@ const Configuracoes = () => {
     }
   }, []);
 
-  // Atualizar o localStorage sempre que os dados mudarem
+
   useEffect(() => {
     localStorage.setItem("empresa", JSON.stringify(empresa));
   }, [empresa]);
 
-  // Função para formatar o CNPJ automaticamente
+
   const formatCNPJ = (value) => {
     return value
-      .replace(/\D/g, "") // Remove tudo que não for número
+      .replace(/\D/g, "") 
       .replace(/^(\d{2})(\d)/, "$1.$2")
       .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
       .replace(/\.(\d{3})(\d)/, ".$1/$2")
       .replace(/(\d{4})(\d)/, "$1-$2")
-      .slice(0, 18); // Limita o tamanho máximo
+      .slice(0, 18); 
   };
 
-  // Função para atualizar os campos
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEmpresa((prev) => ({
@@ -44,25 +44,25 @@ const Configuracoes = () => {
     }));
   };
 
-  // Função para salvar os dados e criar a subcoleção no Firestore
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Verifica se o documento da empresa já existe na coleção do tipo selecionado
+      
       const tipoColecaoRef = collection(db, empresa.tipo.toLowerCase());
-      const empresaDocRef = doc(tipoColecaoRef, empresa.nome); // Nome da empresa será o documento
+      const empresaDocRef = doc(tipoColecaoRef, empresa.nome); 
 
       const empresaDoc = await getDoc(empresaDocRef);
 
       if (empresaDoc.exists()) {
         alert("Esta empresa já existe na categoria selecionada!");
       } else {
-        // Se a empresa não existir, cria o documento na coleção correta (salão de beleza ou barbearia)
-        await setDoc(empresaDocRef, {}); // Cria o documento vazio
+        
+        await setDoc(empresaDocRef, {}); 
 
-        // Criar a subcoleção 'dados' e salvar diretamente os dados
-        const dadosRef = collection(empresaDocRef, "dados"); // Cria a subcoleção 'dados' dentro do documento da empresa
+       
+        const dadosRef = collection(empresaDocRef, "dados"); 
         await setDoc(doc(dadosRef, "informacoes"), {
           nome: empresa.nome,
           cnpj: empresa.cnpj,
